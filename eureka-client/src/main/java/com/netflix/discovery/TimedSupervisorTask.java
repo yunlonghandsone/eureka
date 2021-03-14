@@ -63,27 +63,31 @@ public class TimedSupervisorTask extends TimerTask {
     public void run() {
         Future<?> future = null;
         try {
+            // 执行任务
             future = executor.submit(task);
             threadPoolLevelGauge.set((long) executor.getActiveCount());
+            // 等待任务执行结果
             future.get(timeoutMillis, TimeUnit.MILLISECONDS);  // block until done or timeout
+            // 执行任务成功，设置下次任务执行时间间隔
             delay.set(timeoutMillis);
             threadPoolLevelGauge.set((long) executor.getActiveCount());
             successCounter.increment();
         } catch (TimeoutException e) {
             logger.warn("task supervisor timed out", e);
             timeoutCounter.increment();
-
+            // 执行任务超时，设置下次任务执行时间间隔
             long currentDelay = delay.get();
             long newDelay = Math.min(maxDelay, currentDelay * 2);
             delay.compareAndSet(currentDelay, newDelay);
 
         } catch (RejectedExecutionException e) {
+            // 被拒绝
             if (executor.isShutdown() || scheduler.isShutdown()) {
                 logger.warn("task supervisor shutting down, reject the task", e);
             } else {
                 logger.warn("task supervisor rejected the task", e);
             }
-
+            // 统计拒绝次数
             rejectedCounter.increment();
         } catch (Throwable e) {
             if (executor.isShutdown() || scheduler.isShutdown()) {
@@ -91,13 +95,14 @@ public class TimedSupervisorTask extends TimerTask {
             } else {
                 logger.warn("task supervisor threw an exception", e);
             }
-
+            // 统计异常次数
             throwableCounter.increment();
         } finally {
+            // 取消未结束的任务
             if (future != null) {
                 future.cancel(true);
             }
-
+            // 如果scheduler未关闭，定义下一次的任务
             if (!scheduler.isShutdown()) {
                 scheduler.schedule(this, delay.get(), TimeUnit.MILLISECONDS);
             }

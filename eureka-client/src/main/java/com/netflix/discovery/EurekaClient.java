@@ -160,6 +160,7 @@ public interface EurekaClient extends LookupService {
      * by {@link EurekaClientConfig#getInstanceInfoReplicationIntervalSeconds()}.
      *
      * @param healthCheckHandler app specific healthcheck handler.
+     *   为client注册健康检查处理器
      */
     public void registerHealthCheck(HealthCheckHandler healthCheckHandler);
 
@@ -172,7 +173,8 @@ public interface EurekaClient extends LookupService {
      * 
      * {@link EurekaEventListener#onEvent} is called from the context of an internal thread 
      * and must therefore return as quickly as possible without blocking.
-     * 
+     *  为client注册一个事件监听器
+     *  监听client服务实例信息的更新
      * @param eventListener
      */
     public void registerEventListener(EurekaEventListener eventListener);

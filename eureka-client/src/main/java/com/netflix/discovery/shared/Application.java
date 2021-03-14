@@ -48,7 +48,7 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
  * application.
  *
  * @author Karthik Ranganathan
- *
+ * 同一个服务多个不同实例，信息集合
  */
 @Serializer("com.netflix.discovery.converters.EntityBodyConverter")
 @XStreamAlias("application")
@@ -63,7 +63,7 @@ public class Application {
                 + ", instances=" + instances + ", shuffledInstances="
                 + shuffledInstances + ", instancesMap=" + instancesMap + "]";
     }
-
+    // 服务名
     private String name;
 
     @XStreamOmitField

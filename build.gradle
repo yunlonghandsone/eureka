@@ -1,5 +1,9 @@
 buildscript {
-    repositories { jcenter() }
+    repositories {
+        mavenLocal()
+        maven { url "http://62.234.22.184:8081/repository/maven-public/"}
+        mavenCentral()
+    }
 
     dependencies {
         classpath 'com.netflix.nebula:gradle-extra-configurations-plugin:2.2.+'

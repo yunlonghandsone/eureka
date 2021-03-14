@@ -50,7 +50,8 @@ import com.netflix.discovery.shared.transport.EurekaTransportConfig;
  * </p>
  *
  * @author Karthik Ranganathan
- *
+ * 封装client与server交互所需要的配置信息，SpringCloud为其提供了一个默认配置类，EurekaClientConfigBean
+ * 可以在配置文件中，通过前缀eureka.client+属性名进行属性覆盖
  */
 @ImplementedBy(DefaultEurekaClientConfig.class)
 public interface EurekaClientConfig {

@@ -24,7 +24,7 @@ import com.netflix.appinfo.InstanceInfo;
  *
  * @author Karthik Ranganathan, Greg Kim.
  * @param <T> for backward compatibility
-
+ * 发现活跃的实例
  */
 public interface LookupService<T> {
 
@@ -35,6 +35,7 @@ public interface LookupService<T> {
      * @param appName
      * @return a {@link Application} or null if we couldn't locate any app of
      *         the requested appName
+     *         根据服务实例注册的appName，获取封装有相同appName的服务实例信息容器
      */
     Application getApplication(String appName);
 
@@ -43,6 +44,7 @@ public interface LookupService<T> {
      * all currently registered {@link Application}s.
      *
      * @return {@link Applications}
+     * 返回注册表中当前所有的服务实例信息
      */
     Applications getApplications();
 
@@ -54,6 +56,7 @@ public interface LookupService<T> {
      * @param id
      * @return {@link List} of {@link InstanceInfo}s or
      *         {@link java.util.Collections#emptyList()}
+     *         根据id获取服务实例信息
      */
     List<InstanceInfo> getInstancesById(String id);
 

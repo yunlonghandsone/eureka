@@ -85,6 +85,7 @@ class InstanceInfoReplicator implements Runnable {
     }
 
     public boolean onDemandUpdate() {
+        // 控制流量，当超过限制时，不能进行按需更新
         if (rateLimiter.acquire(burstSize, allowedRatePerMinute)) {
             if (!scheduler.isShutdown()) {
                 scheduler.submit(new Runnable() {
@@ -93,6 +94,7 @@ class InstanceInfoReplicator implements Runnable {
                         logger.debug("Executing on-demand update of local InstanceInfo");
     
                         Future latestPeriodic = scheduledPeriodicRef.get();
+                        // 取消上次的run方法
                         if (latestPeriodic != null && !latestPeriodic.isDone()) {
                             logger.debug("Canceling the latest scheduled update, it will be rescheduled at the end of on demand update");
                             latestPeriodic.cancel(false);
